@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>goji_test</title>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+	<br>
+	<table>
+		<tr>
+			<th bgcolor="#EE0000"><font color="#FFFFFF">タイトル</font></th>
+			<th bgcolor="#EE0000" width="150"><font color="#FFFFFF">説明</font></th>
+			<th bgcolor="#EE0000" width="150"><font color="#FFFFFF">削除</font></th>
+		</tr>
+		{{range $index, $failure := $.Failures}}
+		<tr>
+			<td>{{$failure.Title}}</td>
+			<td>{{$failure.Body}}</td>
+			<td><button name="delete" onClick="OnDeleteRecord({{$failure.ID}})">delete</button></td>
+		</tr>
+		{{end}}
+	</table>
+	<div>
+		<form action="/" method="post">
+			{{if eq $.Add false}}
+				<button name="add" value="DoAdd">Add</button>
+			{{else}}
+				Title:<input name="title" type="text" value="{{$.Title}}"/>
+				Body:<input name="body" type="text" value="{{$.Body}}"/>
+				<button name="insert" value="DoInsert"/>Insert</button>
+			{{end}}
+		</form>
+	</div>
+	{{if $.Error }}
+	{{$.Error}}
+	{{end}}
+</body>
+</html>
