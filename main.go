@@ -56,11 +56,12 @@ type ViewData struct {
 func indexPage(c web.C, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "text/html: charset=utf-8")
 
-	// viewデータの作成
 	var view ViewData
 	if val := r.FormValue("add"); val != "" {
+		//	Addのクリック
 		view.Add = true
 	} else if val := r.FormValue("insert"); val != "" {
+		// insertの実行
 		title := r.FormValue("title")
 		body := r.FormValue("body")
 		if view.Error = insertDBIfNeed(title, body); view.Error != "" {
@@ -69,6 +70,7 @@ func indexPage(c web.C, w http.ResponseWriter, r *http.Request) {
 			view.Add = true
 		}
 	} else if val := r.FormValue("deleteIdx"); val != "" {
+		// deleteの実行
 		id, err := strconv.Atoi(val)
 		if err != nil {
 			log.Printf("delete err id=>%s", val)
@@ -95,10 +97,10 @@ func insertDBIfNeed(title string, body string) string {
 		return "input not enough"
 	}
 	failture := &Failure{Title: title, Body: body}
-	n, err := dbObj.Insert(failture)
+	_, err := dbObj.Insert(failture)
 	if err != nil {
 		return err.Error()
 	}
-	log.Printf("add %d=>%v ", n, failture)
+
 	return ""
 }
